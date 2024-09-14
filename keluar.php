@@ -135,7 +135,7 @@ require 'cek.php';
                                         <tr>
                                             <td><?= $tanggal; ?></td>
                                             <td><?= $namacustomer; ?></td>
-                                            <td><?= $totala; ?></td>
+                                            <td><?= "Rp " . number_format((int)str_replace('.', '', $totala), 0, ',', '.'); ?></td>
                                             <td>
                                                 <?php if ($status == 'Lunas'): ?>
                                                     <span class="badge badge-success">Lunas</span>

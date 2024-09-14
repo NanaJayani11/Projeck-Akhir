@@ -61,9 +61,9 @@ $pdf->SetFont('', 'B');
 $pdf->SetFillColor(220, 220, 220); // Warna latar belakang untuk header
 $pdf->Cell(10, 10, 'No', 1, 0, 'C', 1);
 $pdf->Cell(40, 10, 'Tanggal', 1, 0, 'C', 1);
-$pdf->Cell(60, 10, 'Customer', 1, 0, 'C', 1);
-$pdf->Cell(40, 10, 'Total Amount', 1, 0, 'C', 1);
-$pdf->Cell(40, 10, 'Status', 1, 1, 'C', 1);
+$pdf->Cell(45, 10, 'Customer', 1, 0, 'C', 1);
+$pdf->Cell(60, 10, 'Total Amount', 1, 0, 'C', 1);
+$pdf->Cell(35, 10, 'Status', 1, 1, 'C', 1);
 
 $pdf->SetFont('dejavusans', '');
 
@@ -77,9 +77,9 @@ while ($row = mysqli_fetch_assoc($result)) {
 
     $pdf->Cell(10, 10, $no, 1, 0, 'C');
     $pdf->Cell(40, 10, $row['tanggal'], 1, 0, 'C');
-    $pdf->Cell(60, 10, $row['namacustomer'], 1, 0, 'L');
-    $pdf->Cell(40, 10, number_format($row['totalamount'], 2), 1, 0, 'R');
-    $pdf->Cell(40, 10, $row['status'], 1, 1, 'C');
+    $pdf->Cell(45, 10, $row['namacustomer'], 1, 0, 'L');
+    $pdf->Cell(60, 10, 'Rp ' . number_format($row['totalamount'], 2, ',', '.'), 1, 0, 'R');
+    $pdf->Cell(35, 10, $row['status'], 1, 1, 'C');
 
     $grandtotal += $row['totalamount'];
     $no++;
@@ -89,12 +89,13 @@ while ($row = mysqli_fetch_assoc($result)) {
     if ($currentRow == $totalRows) {
         // Gabungkan baris Total Keseluruhan dengan menggunakan colspan
         $pdf->SetFont('dejavusans', 'B');
-        $pdf->Cell(110, 10, 'Total Keseluruhan', 1, 0, 'R');
-        $pdf->Cell(40, 10, number_format($grandtotal, 2), 1, 0, 'R');
-        $pdf->Cell(40, 10, '', 1, 1, 'R');
+        $pdf->Cell(95, 10, 'Total Keseluruhan', 1, 0, 'R');
+        $pdf->Cell(60, 10, 'Rp ' . number_format($grandtotal, 2, ',', '.'), 1, 0, 'R');
+        $pdf->Cell(35, 10, '', 1, 1, 'R');
         $pdf->SetFont('dejavusans', '', 10);
     }
 }
+
 
 ob_end_clean(); // Menghilangkan output buffering
 $pdf->Output('Laporan_Penjualan.pdf', 'I');

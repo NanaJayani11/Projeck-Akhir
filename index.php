@@ -124,16 +124,25 @@ require 'cek.php';
 
                             while ($fetch = mysqli_fetch_array($ambildatastock)) {
                                 $product = $fetch['namaproduct'];
+                                $status = $fetch['status']; // Ambil status produk (aktif/nonaktif) dari database
 
+                                // Cek apakah produk aktif dan stok habis
+                                if ($status == "aktif") {
                             ?>
-                                <div class="alert alert-danger alert-dismissible">
-                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                                    <strong>Perhatian!</strong> Stock <?= $product; ?> Telah Habis.
-                                </div>
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                        <strong>Perhatian!</strong> Stock <?= $product; ?> Telah Habis.
+                                    </div>
                             <?php
-
+                                } else {
+                                    // Jika produk nonaktif, tidak menampilkan alert
+                                    echo "<script>console.log('Produk $product nonaktif, tidak ada alert.');</script>";
+                                }
                             }
                             ?>
+
+
+
 
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

@@ -11,69 +11,69 @@ if (isset($_POST['addnewproduct'])) {
     $satuan = $_POST['satuan'];
     $harga = $_POST['harga'];
 
-    // Periksa apakah ada gambar yang diunggah
-    if (!empty($_FILES['file']['name'])) {
-        $allowed_extension = array('png', 'jpg');
-        $nama = $_FILES['file']['name']; // Ambil nama file gambar
-        $dot = explode('.', $nama);
-        $ekstensi = strtolower(end($dot)); // Ambil ekstensi
-        $ukuran = $_FILES['file']['size']; // Ambil ukuran file
-        $file_tmp = $_FILES['file']['tmp_name']; // Ambil lokasi file sementara
+    // Validasi apakah produk sudah ada atau belum, tidak peduli ada gambar atau tidak
+    $cek = mysqli_query($conn, "SELECT * FROM stock WHERE namaproduct='$namaproduct'");
+    $hitung = mysqli_num_rows($cek);
 
-        // Penamaan file -> enkripsi
-        $image = md5(uniqid($nama, true) . time()) . '.' . $ekstensi; // Gabungkan nama file yang dienkripsi dengan ekstensi
+    if ($hitung > 0) {
+        // Jika produk sudah ada
+        echo '
+        <script>
+            alert("Nama produk sudah terdaftar");
+            window.location.href="index.php";
+        </script>';
+    } else {
+        // Periksa apakah ada gambar yang diunggah
+        if (!empty($_FILES['file']['name'])) {
+            $allowed_extension = array('png', 'jpg');
+            $nama = $_FILES['file']['name']; // Ambil nama file gambar
+            $dot = explode('.', $nama);
+            $ekstensi = strtolower(end($dot)); // Ambil ekstensi
+            $ukuran = $_FILES['file']['size']; // Ambil ukuran file
+            $file_tmp = $_FILES['file']['tmp_name']; // Ambil lokasi file sementara
 
-        // Validasi apakah produk sudah ada atau belum
-        $cek = mysqli_query($conn, "SELECT * FROM stock WHERE namaproduct='$namaproduct'");
-        $hitung = mysqli_num_rows($cek);
+            // Penamaan file -> enkripsi
+            $image = md5(uniqid($nama, true) . time()) . '.' . $ekstensi; // Gabungkan nama file yang dienkripsi dengan ekstensi
 
-        if ($hitung < 1) {
-            // Jika produk belum ada
             // Proses upload gambar
             if (in_array($ekstensi, $allowed_extension) === true) {
                 // Validasi ukuran file
                 if ($ukuran < 15000000) {
                     move_uploaded_file($file_tmp, 'images/' . $image);
 
+                    // Masukkan data produk ke database dengan gambar
                     $addtotable = mysqli_query($conn, "INSERT INTO stock (namaproduct, deskripsi, satuan, image, harga) VALUES ('$namaproduct', '$deskripsi', '$satuan', '$image', '$harga')");
                     if ($addtotable) {
                         header('location:index.php');
                     } else {
-                        echo 'Gagal';
-                        header('location:index.php');
+                        echo 'Gagal menyimpan data';
                     }
                 } else {
                     echo '
                     <script>
-                        alert("Ukuran terlalu besar");
+                        alert("Ukuran file terlalu besar");
                         window.location.href="index.php";
                     </script>';
                 }
             } else {
                 echo '
                 <script>
-                    alert("File harus png/jpg");
+                    alert("File harus berformat png/jpg");
                     window.location.href="index.php";
                 </script>';
             }
         } else {
-            echo '
-            <script>
-                alert("Nama produk sudah terdaftar");
-                window.location.href="index.php";
-            </script>';
-        }
-    } else {
-        // Jika tidak ada gambar yang diunggah
-        $addtotable = mysqli_query($conn, "INSERT INTO stock (namaproduct, deskripsi, satuan, harga) VALUES ('$namaproduct', '$deskripsi', '$satuan', '$harga')");
-        if ($addtotable) {
-            header('location:index.php');
-        } else {
-            echo 'Gagal';
-            header('location:index.php');
+            // Jika tidak ada gambar yang diunggah, tetap masukkan data produk ke database tanpa gambar
+            $addtotable = mysqli_query($conn, "INSERT INTO stock (namaproduct, deskripsi, satuan, harga) VALUES ('$namaproduct', '$deskripsi', '$satuan', '$harga')");
+            if ($addtotable) {
+                header('location:index.php');
+            } else {
+                echo 'Gagal menyimpan data';
+            }
         }
     }
 }
+
 
 //update product dari stock
 if (isset($_POST['updateproduct'])) {

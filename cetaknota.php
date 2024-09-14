@@ -112,8 +112,8 @@ try {
         $pdf->Cell(80, 10, $row['namaproduct'], 1, 0); // Sesuaikan lebar kolom jika diperlukan
         $pdf->Cell(20, 10, $row['qty'], 1, 0, 'C'); // Sesuaikan lebar kolom jika diperlukan
         $pdf->Cell(20, 10, $row['satuan'], 1, 0, 'C'); // Sesuaikan lebar kolom jika diperlukan
-        $pdf->Cell(35, 10, number_format($row['harga'], 0, ',', '.'), 1, 0, 'R'); // Sesuaikan lebar kolom jika diperlukan
-        $pdf->Cell(35, 10, number_format($row['total'], 0, ',', '.'), 1, 1, 'R'); // Sesuaikan lebar kolom jika diperlukan
+        $pdf->Cell(35, 10, 'Rp ' . number_format($row['harga'], 0, ',', '.'), 1, 0, 'R'); // Tambahkan "Rp" di depan harga
+        $pdf->Cell(35, 10, 'Rp ' . number_format($row['total'], 0, ',', '.'), 1, 1, 'R'); // Tambahkan "Rp" di depan total
     }
 
     // Hitung subtotal, shipping fee, dan total amount
@@ -125,12 +125,12 @@ try {
     $pdf->Ln(10); // Spasi
     $pdf->SetFont('helvetica', '', 10);
     $pdf->Cell(140, 10, 'Subtotal       :', 0, 0, 'R');
-    $pdf->Cell(40, 10, number_format($subtotal, 0, ',', '.'), 0, 1, 'R');
+    $pdf->Cell(40, 10, 'Rp ' . number_format($subtotal, 0, ',', '.'), 0, 1, 'R'); // Tambahkan "Rp" di depan subtotal
     $pdf->Cell(140, 10, 'Shipping Fee   :', 0, 0, 'R');
-    $pdf->Cell(40, 10, number_format($shippingFee, 0, ',', '.'), 0, 1, 'R');
+    $pdf->Cell(40, 10, 'Rp ' . number_format($shippingFee, 0, ',', '.'), 0, 1, 'R'); // Tambahkan "Rp" di depan shipping fee
     $pdf->SetFont('helvetica', 'B', 10);
     $pdf->Cell(140, 10, 'Total Amount   :', 0, 0, 'R');
-    $pdf->Cell(40, 10, number_format($totalAmount, 0, ',', '.'), 0, 1, 'R');
+    $pdf->Cell(40, 10, 'Rp ' . number_format($totalAmount, 0, ',', '.'), 0, 1, 'R'); // Tambahkan "Rp" di depan total amount
 
     // Notes dan Status
     $pdf->SetFont('helvetica', 'B', 10);

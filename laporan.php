@@ -175,21 +175,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['mulaiTanggal']) && isse
 
                                                 // Menyediakan badge berdasarkan status
                                                 $badgeClass = $status === 'Lunas' ? 'badge-success' : 'badge-danger';
+
+                                                // Tampilkan hasil dengan format "Rp" untuk total amount
                                                 echo "
                                                     <tr>
                                                         <td>{$tanggal}</td>
                                                         <td>{$namacustomer}</td>
-                                                        <td>{$totala}</td>
+                                                        <td>Rp " . number_format($totala, 0, ',', '.') . "</td>
                                                         <td><span class='badge {$badgeClass}'>{$status}</span></td>
                                                     </tr>";
                                             }
                                             ?>
                                             <tr>
                                                 <td colspan="2" class="text-right"><strong>Total</strong></td>
-                                                <td class="text-center"><?php echo $grandtotal; ?></td>
+                                                <td class="text-center">Rp <?php echo number_format($grandtotal, 0, ',', '.'); ?></td>
                                                 <td></td>
                                             </tr>
+
                                         </tbody>
+
+
                                     </table>
                                 </div>
                             <?php elseif (isset($_GET['mulaiTanggal']) && isset($_GET['sampaiTanggal'])) : ?>
